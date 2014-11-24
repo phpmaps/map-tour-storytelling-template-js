@@ -988,8 +988,9 @@ define(["storymaps/maptour/core/WebApplicationData",
 				if ( APPCFG.USE_STATIC_ICON && APPCFG.USE_STATIC_ICON.enabled 
 						&& APPCFG.USE_STATIC_ICON.width && APPCFG.USE_STATIC_ICON.height )
 					return;
-				
-				symbol.setWidth(iconCfg.width).setHeight(iconCfg.height).setOffset(iconCfg.offsetX, iconCfg.offsetY);
+				if(symbol.type == "picturemarkersymbol"){
+					symbol.setWidth(iconCfg.width).setHeight(iconCfg.height).setOffset(iconCfg.offsetX, iconCfg.offsetY);
+				}
 				graphic.draw();
 			}
 			

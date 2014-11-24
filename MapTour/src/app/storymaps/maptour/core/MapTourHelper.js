@@ -1,5 +1,5 @@
-define(["storymaps/maptour/core/WebApplicationData", "esri/symbols/PictureMarkerSymbol"], 
-	function(WebApplicationData, PictureMarkerSymbol){
+define(["storymaps/maptour/core/WebApplicationData", "esri/symbols/PictureMarkerSymbol", "esri/symbols/SimpleMarkerSymbol"], 
+	function(WebApplicationData, PictureMarkerSymbol, SimpleMarkerSymbol){
 		/**
 		 * MapTourHelper
 		 * @class MapTourHelper
@@ -165,28 +165,52 @@ define(["storymaps/maptour/core/WebApplicationData", "esri/symbols/PictureMarker
 			{
 				return APPCFG.ICON_CFG[type || 'normal'];
 			},
+			getSymbolFromWebMap:function(){
+				var symbol = null;
+				var drawingInfo = app.data.getWebMapItem().itemData.operationalLayers[0].featureCollection.layers[0].layerDefinition.drawingInfo;
+				switch(drawingInfo.renderer.symbol.type) {
+				    case "esriPMS":
+				    		symbol = new PictureMarkerSymbol(drawingInfo.renderer.symbol);
+				        break;
+				    case "esriSMS":
+				        symbol = new SimpleMarkerSymbol(drawingInfo.renderer.symbol);
+				        break;
+				    default:
+				    		symbol = new PictureMarkerSymbol(drawingInfo.renderer.symbol);
+				}
+				console.log("inside getSymbolFromWebMap ran");
+				console.log(symbol);
+				return symbol;
+			},
 			getSymbol: function(color, number, type, doNotAllowStatic)
 			{
-				var iconSpec = APPCFG.ICON_CFG[type || 'normal'];
-				var isStatic = ! doNotAllowStatic && APPCFG.USE_STATIC_ICON && APPCFG.USE_STATIC_ICON.enabled;
-				var symbol = null;
 				
-				if ( isStatic )	
-					symbol = new PictureMarkerSymbol(
-						APPCFG.USE_STATIC_ICON.url,
-						APPCFG.USE_STATIC_ICON.width || iconSpec.width, 
-						APPCFG.USE_STATIC_ICON.height || iconSpec.height
-					);
-				else
-					symbol = new PictureMarkerSymbol(
-						this.getSymbolUrl(color, number), 
-						iconSpec.width, 
-						iconSpec.height
-					);
-				
-				if ( ! isStatic || (!APPCFG.USE_STATIC_ICON.width || !APPCFG.USE_STATIC_ICON.height))
-					symbol.setOffset(iconSpec.offsetX, iconSpec.offsetY);
-				
+				if(APPCFG.USE_WEB_MAP_MARKER_SYMBOLS){
+					var symbol = this.getSymbolFromWebMap();	
+				}else{
+					var iconSpec = APPCFG.ICON_CFG[type || 'normal'];
+					var isStatic = ! doNotAllowStatic && APPCFG.USE_STATIC_ICON && APPCFG.USE_STATIC_ICON.enabled;
+					var symbol = null;
+					
+					if ( isStatic ){
+						symbol = new PictureMarkerSymbol(
+							APPCFG.USE_STATIC_ICON.url,
+							APPCFG.USE_STATIC_ICON.width || iconSpec.width, 
+							APPCFG.USE_STATIC_ICON.height || iconSpec.height
+						);
+					}else{
+						symbol = new PictureMarkerSymbol(
+							this.getSymbolUrl(color, number), 
+							iconSpec.width, 
+							iconSpec.height
+						);
+					}
+					
+					if ( ! isStatic || (!APPCFG.USE_STATIC_ICON.width || !APPCFG.USE_STATIC_ICON.height)){
+						symbol.setOffset(iconSpec.offsetX, iconSpec.offsetY);		
+					}
+				}
+
 				return symbol;
 			},
 			getSymbolMobileClip: function()

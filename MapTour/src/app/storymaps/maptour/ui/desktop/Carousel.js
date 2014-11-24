@@ -115,16 +115,24 @@ define(["dojo/has",
 				
 				$(items).each(function(i, slide){
 					var pinCssClass = MapTourHelper.getSymbolCss(slide.attributes.getColor());
-	
-					// Numbering is done through CSS (require IE8+)
-					// The first div is necessary for vertical centering and the span around the image for the numbering
-					// The color specification though class is not ideal, but to have that more dynamic all the rest is a pain
-					carouselHTML += '<li>';
-					carouselHTML += ' <div class="carousel-item-div">';
-					carouselHTML += '  <span class="' + pinCssClass +'"><img data-src="' + slide.attributes.getThumbURL() + '" onerror="mediaNotFoundHandler(this)"/></span>';
-					carouselHTML += '  <div>' + ($('<div>' + slide.attributes.getName() + '</div>').html()) + '</div>';
-					carouselHTML += ' </div>';
-					carouselHTML += '</li>';
+					if(APPCFG.TURN_OFF_THUMBNAIL_NUMBERS){
+						carouselHTML += '<li>';
+						carouselHTML += ' <div class="carousel-item-div">';
+						carouselHTML += '  <img data-src="' + slide.attributes.getThumbURL() + '" onerror="mediaNotFoundHandler(this)"/>';
+						carouselHTML += '  <div>' + ($('<div>' + slide.attributes.getName() + '</div>').html()) + '</div>';
+						carouselHTML += ' </div>';
+						carouselHTML += '</li>';
+					}else{
+						// Numbering is done through CSS (require IE8+)
+						// The first div is necessary for vertical centering and the span around the image for the numbering
+						// The color specification though class is not ideal, but to have that more dynamic all the rest is a pain
+						carouselHTML += '<li>';
+						carouselHTML += ' <div class="carousel-item-div">';
+						carouselHTML += '  <span class="' + pinCssClass +'"><img data-src="' + slide.attributes.getThumbURL() + '" onerror="mediaNotFoundHandler(this)"/></span>';
+						carouselHTML += '  <div>' + ($('<div>' + slide.attributes.getName() + '</div>').html()) + '</div>';
+						carouselHTML += ' </div>';
+						carouselHTML += '</li>';		
+					}
 				});
 				
 				return carouselHTML;

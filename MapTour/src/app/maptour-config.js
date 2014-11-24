@@ -1,7 +1,6 @@
 APPCFG = {
-	//
-	// UI
-	//
+	USE_WEB_MAP_MARKER_SYMBOLS: true,
+	TURN_OFF_THUMBNAIL_NUMBERS:true,
 	
 	// Enable embed mode: disable header on desktop 
 	// Can also be set through url parameter ?embed
