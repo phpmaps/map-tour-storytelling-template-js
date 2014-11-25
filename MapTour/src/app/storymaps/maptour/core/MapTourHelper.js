@@ -176,6 +176,7 @@ define(["storymaps/maptour/core/WebApplicationData", "esri/symbols/PictureMarker
 				        symbol = new SimpleMarkerSymbol(drawingInfo.renderer.symbol);
 				        break;
 				    default:
+				    		console.log("This story map only supports simple marker symbols and picture marker symbols.");
 				    		symbol = new PictureMarkerSymbol(drawingInfo.renderer.symbol);
 				}
 				return symbol;
