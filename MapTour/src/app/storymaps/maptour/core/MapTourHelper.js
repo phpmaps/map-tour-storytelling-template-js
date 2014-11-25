@@ -178,8 +178,6 @@ define(["storymaps/maptour/core/WebApplicationData", "esri/symbols/PictureMarker
 				    default:
 				    		symbol = new PictureMarkerSymbol(drawingInfo.renderer.symbol);
 				}
-				console.log("inside getSymbolFromWebMap ran");
-				console.log(symbol);
 				return symbol;
 			},
 			getSymbol: function(color, number, type, doNotAllowStatic)
